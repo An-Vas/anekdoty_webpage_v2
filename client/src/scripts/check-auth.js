@@ -27,3 +27,20 @@ export async function IsAdmin(){
     else return false ;
 
 }
+
+
+export async function GetUserName(){
+    const response = await fetch('/api/auth/get-username', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            mode: 'no-cors',
+        },
+    });
+
+    const usernameJson = await response.json({});
+
+
+    return usernameJson.username;
+
+}

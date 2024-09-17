@@ -24,6 +24,27 @@ async function adminAuth  (req, res, next) {
     }
 }
 
+async function getUsername  (req, res) {
+    console.log("[" +  new Date().toLocaleString() + `] Client: requested /api/auth/get-username`);
+
+    const token = req.cookies.jwt
+    if (token) {
+        jwt.verify(token, jwtSecret, (err, decodedToken) => {
+            if (err) {
+                return res.status(401).json({ message: "Can't get username because of error" + err})
+            } else {
+                return res.status(200).json({username: decodedToken.username})
+            }
+        })
+    } else {
+        return res
+            .status(401)
+            .json({ message: "Can't get username, token not available" })
+    }
+}
+
+
+
 
 async function anyAuth (req, res, next) {
     console.log("[" +  new Date().toLocaleString() + `] Client: requested /api/auth/user`);
@@ -48,4 +69,4 @@ async function anyAuth (req, res, next) {
     }
 }
 
-module.exports = { adminAuth, anyAuth };
+module.exports = { adminAuth, anyAuth, getUsername };

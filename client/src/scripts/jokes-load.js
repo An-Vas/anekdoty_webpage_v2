@@ -1,6 +1,7 @@
-const GetJokesFromDb = async (category) => {
+const GetJokesFromDb = async (category, username) => {
     
     var jokes = [];
+
 
     const response = await fetch('/api/jokes/loadjokes/' + category, {
         method: 'POST',
@@ -8,11 +9,14 @@ const GetJokesFromDb = async (category) => {
             'Content-Type': 'application/json',
             mode: 'no-cors',
         },
+        body: JSON.stringify({
+            username: username,
+
+        }),
 
     });
 
     jokes = await response.json({});
-
     return jokes;
 
 }

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
+import React, {useState, useEffect} from "react";
+import {useLocation} from 'react-router-dom';
 
 import GetJokesFromDb from "../scripts/jokes-load"
 import EditJoke from "../scripts/jokes-edit"
-import { IsUser, IsAdmin } from "../scripts/check-auth";
+import VoteJoke from "../scripts/vote"
+import {IsUser, IsAdmin, GetUserName} from "../scripts/check-auth";
 
 import Edit from './parts/edit';
 import Joke from './parts/joke';
@@ -21,6 +22,8 @@ const Jokes = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [editingIndex, setEditingIndex] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [username, setUsername] = useState("");
+    const [category, setCategory] = useState("Загрузка");
 
     const location = useLocation();
 
@@ -37,6 +40,26 @@ const Jokes = () => {
         setIsModalOpen(false);
     };
 
+    const voteUp = async (jokeId, index) => {
+        var newRank = await VoteJoke(jokeId, "Up", username);
+
+        const tmpJokes = [...jokes];
+        tmpJokes[index].rank = newRank;
+        tmpJokes[index].vote = "Up";
+        setJokes(tmpJokes)
+
+    };
+    const voteDown = async(jokeId, index) => {
+        var newRank =await VoteJoke(jokeId, "Down", username);
+
+        const tmpJokes = [...jokes];
+        tmpJokes[index].rank = newRank;
+        tmpJokes[index].vote = "Down";
+        setJokes(tmpJokes)
+    };
+
+    const jokesSet = async (data) => {await setJokes(data); return jokes;}
+
 
     useEffect(() => {
 
@@ -48,32 +71,66 @@ const Jokes = () => {
             setIsAdmin(isAdmin);
         });
 
+
+
         if (location) {
 
-            const urlParts = location.pathname.split('/');
-            const pathName = urlParts[urlParts.length - 1];
+            GetUserName().then((user) => {
+                setUsername(user);
+                return user;
+            }).then((user)=>{
 
-            GetJokesFromDb(pathName).then((data) => {
-                setJokes(data);
-                setIsLoading(false);
-                if (data.length >= 1) {
-                    setIsEmpty(false);
-                }
+                const urlParts = location.pathname.split('/');
+                const pathName = urlParts[urlParts.length - 1];
 
-            });
+                GetJokesFromDb(pathName, user)
+
+                    .then(async (data) => {
+
+                        await jokesSet(data).then(
+                            (jokes)=>{
+                                setIsLoading(false);
+                                if (jokes.length >= 1) {
+                                    setIsEmpty(false);
+                                    setCategory(jokes[0].category)
+                                }
+                            }
+                        )
+                    });
+            })
+
+
+
 
         }
 
     }, [location])
 
 
+    React.useEffect(() => {
+
+        setIsLoading(false);
+        if (jokes.length >= 1) {
+            setIsEmpty(false);
+            setCategory(jokes[0].category)
+        }
+
+
+    }, [jokes]);
+
+
 
 
     return (
         <div>
+            <h4>
+                Выбрана категория:
+                {isLoading || isEmpty ? (" Загрузка...") : (" " + category)}
+            </h4>
+
             <a href="/home">К списку категорий</a>
 
-            {isUser ? (
+
                 <div>
                     {isLoading ? (
                         <p>Загрузка...</p>
@@ -81,7 +138,7 @@ const Jokes = () => {
 
                         <div>
 
-                            { isEmpty ? (
+                            {isEmpty ? (
                                 <p>На сервере пока нет анекдотов из этой категории!</p>
                             ) : (
                                 <div></div>
@@ -90,6 +147,7 @@ const Jokes = () => {
                             {
 
                                 jokes.map((str, index) => (
+
 
                                     <div>
                                         {isAdmin ? (
@@ -110,7 +168,12 @@ const Jokes = () => {
                                                         text={str.text}
                                                         id={str.id}
                                                         index={index}
-                                                        onClick={handleEdit}
+                                                        rank={str.rank}
+                                                        onClickEdit={handleEdit}
+                                                        onClickVoteUp={voteUp}
+                                                        onClickVoteDown={voteDown}
+                                                        isUp={(str.vote == "Up")}
+                                                        isDown={(str.vote == "Down")}
                                                     />
                                                 )}
 
@@ -121,10 +184,18 @@ const Jokes = () => {
                                                 <Joke
                                                     text={str.text}
                                                     id={str.id}
+                                                    index={index}
+                                                    rank={str.rank}
+                                                    onClickVoteUp={voteUp}
+                                                    onClickVoteDown={voteDown}
+                                                    isUp={(str.vote == "Up")}
+                                                    isDown={(str.vote == "Down")}
                                                 />
                                             </div>
 
-                                        )}
+                                        )
+
+                                        }
 
                                     </div>
                                 ))
@@ -132,12 +203,10 @@ const Jokes = () => {
                         </div>
                     )}
                 </div>
-            ) : (
-                <div>Пожалуйста, авторизуйтесь на сайте для просмотра анекдотов</div>
-            )
 
 
-            }
+
+
 
         </div>
     );

@@ -20,3 +20,22 @@
     top: 10px;
     right: 10px;
 }
+
+.rank-block {
+    display: flex;
+    align-items: center;
+}
+
+.rank-content {
+    padding: 10px
+}
+
+
+.text-block__vote-button_ChosenUp {
+    background-color: green;
+}
+
+
+.text-block__vote-button_ChosenDown {
+    background-color: red;
+}

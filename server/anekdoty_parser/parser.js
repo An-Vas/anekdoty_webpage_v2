@@ -43,7 +43,7 @@ async function calculateRes(link){
                         categoryLink: link.href,
                         category: curCategoryName,
                         hrefs: hrefList.join(', '),
-                        rank: likeCounter
+                        rank: 0//likeCounter
                     }
                     jokesArr.push(joke);
                 });
