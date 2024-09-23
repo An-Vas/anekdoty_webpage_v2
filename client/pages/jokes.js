@@ -12,8 +12,7 @@ import AdminJoke from './parts/admin-joke';
 
 import "../css/jokes-style.css"
 
-
-const Jokes = () => {
+const Jokes = ({}) => {
 
     const [jokes, setJokes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -70,7 +69,6 @@ const Jokes = () => {
         IsAdmin().then((isAdmin) => {
             setIsAdmin(isAdmin);
         });
-
 
 
         if (location) {
@@ -203,9 +201,6 @@ const Jokes = () => {
                         </div>
                     )}
                 </div>
-
-
-
 
 
         </div>

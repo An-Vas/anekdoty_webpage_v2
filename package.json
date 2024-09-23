@@ -3,27 +3,44 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/index.js",
-    "start-react": "node client/src/index.js",
-    "start-all": "npm run start-server && npm run start-react"
+    "build-client": "npx webpack",
+    "build-server": "npx webpack --config webpack.server.config.js",
+    "start": "node server-build/index.js"
   },
+
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
+
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.22.20",
+    "@babel/preset-react": "^7.22.15",
+    "babel-loader": "^9.1.3",
+    "css-loader": "^5.2.7",
+    "mini-css-extract-plugin": "^2.9.1",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-node-externals": "^3.0.0"
+  },
   "dependencies": {
-    "express": "^4.19.2",
     "axios": "^1.7.3",
+    "babel-plugin-css-modules-transform": "^1.6.2",
+    "babel-plugin-dynamic-import-node": "^2.3.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
-    "hbs": "^4.2.0",
+    "copy-webpack-plugin": "^12.0.2",
+    "express": "^4.19.2",
+    "html-webpack-plugin": "^5.6.0",
     "jsdom": "^24.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.2",
-    "sequelize": "^6.37.3",
-    "webpack": "^5.93.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
+    "style-loader": "^4.0.0"
   }
 }

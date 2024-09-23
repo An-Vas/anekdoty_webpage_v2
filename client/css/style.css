@@ -6,7 +6,6 @@
 }
 
 
-
 header {
     background-color: #90EE90;
     color: white;
@@ -17,6 +16,9 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #90EE90;
+    color: white;
+    padding: 20px;
 }
 
 main {
@@ -71,7 +73,7 @@ a:hover {
     color: #00FF7F;
 }
 
-.auth-button{
+.auth-button {
     margin-right: 30px;
     color: white !important;
 }

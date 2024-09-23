@@ -1,6 +1,7 @@
 const GetJokesFromDb = async (category, username) => {
     
     var jokes = [];
+    console.log("cat " + category);
 
 
     const response = await fetch('/api/jokes/loadjokes/' + category, {
@@ -16,6 +17,7 @@ const GetJokesFromDb = async (category, username) => {
 
     });
 
+    console.log(jokes)
     jokes = await response.json({});
     return jokes;
 

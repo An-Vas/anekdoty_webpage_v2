@@ -35,7 +35,7 @@ const Home = () => {
                             {
                                 strings.map((str, index) => (
                                     <li key={index}>
-                                        <a href={"/jokes/" + str.linkpart}>{str.category}
+                                        <a href={"/" + str.linkpart}>{str.category}
                                         </a>
                                     </li>
                                 ))

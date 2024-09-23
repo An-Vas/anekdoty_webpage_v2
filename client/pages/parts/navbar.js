@@ -13,7 +13,7 @@ const Navbar = () => {
     },)
 
     return (
-        <header>
+
             <div id="header-content">
                 <h1>Анекдоты localhost :)</h1>
 
@@ -32,7 +32,6 @@ const Navbar = () => {
                 )}
 
             </div>
-        </header>
     );
 };
 
